@@ -57,7 +57,7 @@ func (s *String) UnmarshalJSON(data []byte) error {
 	default:
 		err = fmt.Errorf("json: cannot unmarshal %v into Go value of type null.String", reflect.TypeOf(v).Name())
 	}
-	s.Valid = (err == nil) && (s.String != "")
+	s.Valid = err == nil
 	return err
 }
 
@@ -74,7 +74,7 @@ func (s String) MarshalJSON() ([]byte, error) {
 // It will unmarshal to a null String if the input is a blank string.
 func (s *String) UnmarshalText(text []byte) error {
 	s.String = string(text)
-	s.Valid = s.String != ""
+	s.Valid = s.String != "" // TODO if you use RenderText
 	return nil
 }
 
