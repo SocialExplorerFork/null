@@ -47,11 +47,6 @@ func TestUnmarshalString(t *testing.T) {
 	maybePanic(err)
 	assertStr(t, ns, "sql.NullString json")
 
-	var blank String
-	err = json.Unmarshal(blankStringJSON, &blank)
-	maybePanic(err)
-	assertNullStr(t, blank, "blank string json")
-
 	var null String
 	err = json.Unmarshal(nullJSON, &null)
 	maybePanic(err)
