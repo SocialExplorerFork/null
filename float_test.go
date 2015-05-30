@@ -6,7 +6,8 @@ import (
 )
 
 var (
-	floatJSON     = []byte(`1.2345`)
+	floatJSON1    = []byte(`1.2345`)
+	floatJSON2    = []byte(`1e+06`)
 	nullFloatJSON = []byte(`{"Float64":1.2345,"Valid":true}`)
 )
 
@@ -32,7 +33,7 @@ func TestFloatFromPtr(t *testing.T) {
 
 func TestUnmarshalFloat(t *testing.T) {
 	var f Float
-	err := json.Unmarshal(floatJSON, &f)
+	err := json.Unmarshal(floatJSON1, &f)
 	maybePanic(err)
 	assertFloat(t, f, "float json")
 

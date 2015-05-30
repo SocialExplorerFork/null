@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"math"
 	"reflect"
 	"strconv"
 )
@@ -48,8 +49,11 @@ func (i *Int) UnmarshalJSON(data []byte) error {
 	json.Unmarshal(data, &v)
 	switch v.(type) {
 	case float64:
-		// Unmarshal again, directly to int64, to avoid intermediate float64
-		err = json.Unmarshal(data, &i.Int64)
+		if v.(float64) > float64(math.MaxInt64) {
+			err = fmt.Errorf("json: cannot unmarshal %#v into null.Int due to overflow.", v)
+		} else {
+			i.Int64 = int64(v.(float64))
+		}
 	case map[string]interface{}:
 		err = json.Unmarshal(data, &i.NullInt64)
 	case nil:

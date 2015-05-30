@@ -57,24 +57,26 @@ func TestUnmarshalInt(t *testing.T) {
 }
 
 func TestUnmarshalNonIntegerNumber(t *testing.T) {
-	var i Int
-	err := json.Unmarshal(floatJSON, &i)
-	if err == nil {
-		panic("err should be present; non-integer number coerced to int")
+	var i1 Int
+	err := json.Unmarshal(floatJSON1, &i1)
+	maybePanic(err)
+	if i1.Int64 != 1 {
+		t.Errorf("bad %s int: %d ≠ %d\n", floatJSON1, i1.Int64, 1)
+	}
+
+	var i2 Int
+	err = json.Unmarshal(floatJSON2, &i2)
+	maybePanic(err)
+	if i2.Int64 != 1000000 {
+		t.Errorf("bad %s int: %d ≠ %d\n", floatJSON2, i2.Int64, 1000000)
 	}
 }
 
 func TestUnmarshalInt64Overflow(t *testing.T) {
-	int64Overflow := uint64(math.MaxInt64)
-
-	// Max int64 should decode successfully
+	// Attempt to overflow
+	int64Overflow := uint64(math.MaxUint64)
 	var i Int
 	err := json.Unmarshal([]byte(strconv.FormatUint(int64Overflow, 10)), &i)
-	maybePanic(err)
-
-	// Attempt to overflow
-	int64Overflow++
-	err = json.Unmarshal([]byte(strconv.FormatUint(int64Overflow, 10)), &i)
 	if err == nil {
 		panic("err should be present; decoded value overflows int64")
 	}
