@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"reflect"
+	"strconv"
 )
 
 // String is a nullable string. It supports SQL and JSON serialization.
@@ -54,6 +55,10 @@ func (s *String) UnmarshalJSON(data []byte) error {
 	case nil:
 		s.Valid = false
 		return nil
+	case float64:
+		s.String = strconv.FormatFloat(v.(float64), 'f', -1, 64)
+	case bool:
+		s.String = strconv.FormatBool(v.(bool))
 	default:
 		err = fmt.Errorf("json: cannot unmarshal %v into Go value of type null.String", reflect.TypeOf(v).Name())
 	}
