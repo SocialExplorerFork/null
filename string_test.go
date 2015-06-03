@@ -72,6 +72,29 @@ func TestTextUnmarshalString(t *testing.T) {
 	assertNullStr(t, null, "UnmarshalText() empty string")
 }
 
+func TestUnmarshalFloatToString(t *testing.T) {
+	var str String
+	err := json.Unmarshal(floatJSON1, &str)
+	maybePanic(err)
+	if str.String != "1.2345" {
+		t.Errorf("bad %v string: %s ≠ %s\n", floatJSON1, str.String, "1.2345")
+	}
+	if !str.Valid {
+		t.Error(str, "is invalid, but should be valid")
+	}
+}
+func TestUnmarshalBoolToString(t *testing.T) {
+	var str String
+	err := json.Unmarshal(boolJSON, &str)
+	maybePanic(err)
+	if str.String != "true" {
+		t.Errorf("bad %v string: %s ≠ %s\n", boolJSON, str.String, "true")
+	}
+	if !str.Valid {
+		t.Error(str, "is invalid, but should be valid")
+	}
+}
+
 func TestMarshalString(t *testing.T) {
 	str := StringFrom("test")
 	data, err := json.Marshal(str)
